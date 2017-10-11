@@ -1,5 +1,7 @@
 import java.io.Console;
 import java.io.IOException;
+import java.io.PrintStream;
+import java.io.UnsupportedEncodingException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
@@ -29,6 +31,7 @@ public class CryptoClient implements Runnable, ReaderObserver {
 	public void run() {
 		// Prepare variables.
 		try {
+
 			socket = new DatagramSocket(10001);
 			
 			serverAddr = queryServerAddress();
@@ -149,7 +152,8 @@ public class CryptoClient implements Runnable, ReaderObserver {
 		request.put("method", method);
 		request.put("data", text);
 		String data = request.toJSONString();
-		DatagramPacket packet = new DatagramPacket(data.getBytes(), data.length(), serverAddr, serverPort);
+		byte[] dataToSend = data.getBytes("utf-8");
+		DatagramPacket packet = new DatagramPacket(dataToSend, dataToSend.length, serverAddr, serverPort);
 		socket.send(packet);
 	}
 	
@@ -162,7 +166,8 @@ public class CryptoClient implements Runnable, ReaderObserver {
 		request.put("method", method);
 		request.put("data", text);
 		String data = request.toJSONString();
-		DatagramPacket packet = new DatagramPacket(data.getBytes(), data.length(), serverAddr, serverPort);
+		byte[] dataToSend = data.getBytes("utf-8");
+		DatagramPacket packet = new DatagramPacket(dataToSend, dataToSend.length, serverAddr, serverPort);
 		socket.send(packet);
 	}
 	

@@ -43,7 +43,7 @@ public class CryptoServer implements Runnable {
 					System.out.println("Start to receive packets...");
 					socket.receive(packet);
 					System.out.println("Packet received!");
-					String receivedData = new String(packet.getData(), 0, packet.getLength());
+					String receivedData = new String(packet.getData(), packet.getOffset(), packet.getLength(), "utf-8");
 					sender = packet.getAddress();
 					System.out.println("Sender is: " + sender.getHostAddress() + ":" + packet.getPort());
 					System.out.println("Received raw data: " + receivedData);
@@ -79,7 +79,8 @@ public class CryptoServer implements Runnable {
 				} finally {
 					if (null != response && null != sender) {
 						System.out.println("Sending response: " + response);
-						DatagramPacket sendPacket = new DatagramPacket(response.getBytes(), response.length());
+						byte[] responseToSend = response.getBytes();
+						DatagramPacket sendPacket = new DatagramPacket(responseToSend, responseToSend.length);
 						sendPacket.setAddress(sender);
 						sendPacket.setPort(packet.getPort());
 						try {
